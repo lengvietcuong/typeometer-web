@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react';
-import TypingArea from '/components/TypingArea.tsx';
-import { dark_gray, green, translucent_white } from '/styles/colors.tsx'
+import TypingArea from '../../components/TypingArea';
+import { dark_gray, green, translucent_white } from '../../styles/colors';
 import "./globals.css"
 
 const TypingTest: React.FC = () => {
@@ -57,7 +57,7 @@ const TypingTest: React.FC = () => {
             <div style={{ backgroundColor: translucent_white, padding: '10px', borderRadius: '8px 8px 0 0', width: textBoxWidth ? textBoxWidth : 'fit-content', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <h1 style={{ textAlign: 'center', color: green, fontSize: '1.3em', margin: '0' }}>{sourceOfText}</h1>
             </div>
-            <TypingArea textToType={textToType} sourceOfText={sourceOfText} onTypingComplete={handleTypingComplete} resetRef={typingAreaRef} />
+            <TypingArea textToType={textToType} onTypingComplete={handleTypingComplete} resetRef={typingAreaRef} />
             {showNextButton && (
                 <button style={{ marginTop: '20px', backgroundColor: green, color: 'black', padding: '8px 16px', borderRadius: '4px', border: 'none' }} onClick={handleNextButtonClick}>
                     Next

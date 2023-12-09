@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { green, red, translucent_white } from '/styles/colors.tsx';
+import { green, red, translucent_white } from '../styles/colors';
 
 interface TypingAreaProps {
     textToType: string;
-    sourceOfText: string;
     onTypingComplete: () => void;
     resetRef: React.MutableRefObject<() => void>;
 }
 
-const TypingArea: React.FC<TypingAreaProps> = ({ textToType, sourceOfText, onTypingComplete = () => { }, resetRef }) => {
+const TypingArea: React.FC<TypingAreaProps> = ({ textToType, onTypingComplete = () => { }, resetRef }) => {
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [lastCorrectIndex, setLastCorrectIndex] = useState<number>(-1);
     const [startTime, setStartTime] = useState<number | null>(null);
