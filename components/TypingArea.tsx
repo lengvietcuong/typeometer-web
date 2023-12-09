@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { green, red, translucent_white } from '../styles/colors';
+import { green, red, translucentWhite } from '../styles/colors';
 
 interface TypingAreaProps {
     textToType: string;
@@ -89,7 +89,7 @@ const TypingArea: React.FC<TypingAreaProps> = ({ textToType, onTypingComplete = 
     const renderTextColor = () => {
         return (
             <div id="typing-area" style={{ color: 'white', fontFamily: 'Courier', textAlign: 'center' }}>
-                <div style={{ maxWidth: '800px', margin: 'auto', border: `1.5px solid ${translucent_white}`, borderRadius: '0 0 8px 8px', padding: '20px 32px', overflowWrap: 'break-word', textAlign: 'left', fontSize: '1.3em' }}>
+                <div style={{ maxWidth: '800px', margin: 'auto', border: `1.5px solid ${translucentWhite}`, borderRadius: '0 0 8px 8px', padding: '20px 32px', overflowWrap: 'break-word', textAlign: 'left', fontSize: '1.3em' }}>
                     {textToType.split('').map((char, index) => {
                         const isHighlighted = index < currentIndex;
                         const isCorrect = index <= lastCorrectIndex;

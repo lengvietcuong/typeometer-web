@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react';
-import TypingArea from '../../components/TypingArea';
-import { dark_gray, green, translucent_white } from '../../styles/colors';
+import TypingArea from '../components/TypingArea';
+import { darkGray, green, translucentWhite } from '../styles/colors';
 import "./globals.css"
 
 const TypingTest: React.FC = () => {
@@ -53,8 +53,8 @@ const TypingTest: React.FC = () => {
     };
 
     return (
-        <div style={{ backgroundColor: dark_gray, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: 'Courier', color: 'gray', padding: '20px' }}>
-            <div style={{ backgroundColor: translucent_white, padding: '10px', borderRadius: '8px 8px 0 0', width: textBoxWidth ? textBoxWidth : 'fit-content', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ backgroundColor: darkGray, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: 'Courier', color: 'gray', padding: '20px' }}>
+            <div style={{ backgroundColor: translucentWhite, padding: '10px', borderRadius: '8px 8px 0 0', width: textBoxWidth ? textBoxWidth : 'fit-content', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <h1 style={{ textAlign: 'center', color: green, fontSize: '1.3em', margin: '0' }}>{sourceOfText}</h1>
             </div>
             <TypingArea textToType={textToType} onTypingComplete={handleTypingComplete} resetRef={typingAreaRef} />
