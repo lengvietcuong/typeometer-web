@@ -53,13 +53,45 @@ const TypingTest: React.FC = () => {
     };
 
     return (
-        <div style={{ backgroundColor: darkGray, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: 'Courier', color: 'gray', padding: '20px' }}>
-            <div style={{ backgroundColor: translucentWhite, padding: '10px', borderRadius: '8px 8px 0 0', width: textBoxWidth ? textBoxWidth : 'fit-content', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <h1 style={{ textAlign: 'center', color: green, fontSize: '1.3em', margin: '0' }}>{sourceOfText}</h1>
+        <div
+            style={{
+                backgroundColor: darkGray,
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}
+        >
+            <div
+                style={{
+                    backgroundColor: translucentWhite,
+                    padding: '0.7rem',
+                    borderRadius: '8px 8px 0 0',
+                    width: textBoxWidth ? textBoxWidth : 'fit-content',
+                }}
+            >
+                <h1 style={{ textAlign: 'center', color: green, fontSize: '1.3em' }}>
+                    {sourceOfText}
+                </h1>
             </div>
-            <TypingArea textToType={textToType} onTypingComplete={handleTypingComplete} resetRef={typingAreaRef} />
+            <TypingArea
+                textToType={textToType}
+                onTypingComplete={handleTypingComplete}
+                resetRef={typingAreaRef}
+            />
             {showNextButton && (
-                <button style={{ marginTop: '20px', backgroundColor: green, color: 'black', padding: '8px 16px', borderRadius: '4px', border: 'none' }} onClick={handleNextButtonClick}>
+                <button
+                    style={{
+                        marginTop: '1.3rem',
+                        backgroundColor: green,
+                        color: 'black',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '4px',
+                        border: 'none',
+                    }}
+                    onClick={handleNextButtonClick}
+                >
                     Next
                 </button>
             )}

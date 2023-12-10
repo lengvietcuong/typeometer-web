@@ -88,8 +88,16 @@ const TypingArea: React.FC<TypingAreaProps> = ({ textToType, onTypingComplete = 
 
     const renderTextColor = () => {
         return (
-            <div id="typing-area" style={{ color: 'white', fontFamily: 'Courier', textAlign: 'center' }}>
-                <div style={{ maxWidth: '800px', margin: 'auto', border: `1.5px solid ${translucentWhite}`, borderRadius: '0 0 8px 8px', padding: '20px 32px', overflowWrap: 'break-word', textAlign: 'left', fontSize: '1.3em' }}>
+            <div id="typing-area" style={{ textAlign: 'center' }}>
+                <div style={{
+                    maxWidth: '60vw',
+                    border: `1.5px solid ${translucentWhite}`,
+                    borderRadius: '0 0 8px 8px',
+                    padding: '2rem 3rem',
+                    overflowWrap: 'break-word',
+                    textAlign: 'left',
+                    fontSize: '1.3em',
+                }}>
                     {textToType.split('').map((char, index) => {
                         const isHighlighted = index < currentIndex;
                         const isCorrect = index <= lastCorrectIndex;
@@ -106,7 +114,7 @@ const TypingArea: React.FC<TypingAreaProps> = ({ textToType, onTypingComplete = 
                     })}
                 </div>
                 {startTime && typingSpeed !== null && accuracy !== null && (
-                    <div style={{ marginTop: '40px', fontSize: '1.3em', color: 'white' }}>
+                    <div style={{ marginTop: '3.5rem', fontSize: '1.3em' }}>
                         Speed: {typingSpeed} WPM
                         <br />
                         Accuracy: {accuracy}%
