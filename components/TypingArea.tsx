@@ -24,72 +24,48 @@ const TypingArea: React.FC<TypingAreaProps> = ({
 
     const validChars = /^[a-zA-Z0-9\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]$/;
 
-    useEffect(() => {
-        const calculateMaxLineWidth = () => {
-            const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
-            const leftRightPaddings = 2 * 3 * rootFontSize;
-            const leftRightBorders = 2 * 1.5;
-            const maxPossibleLineWidth = window.innerWidth * 0.6 - leftRightPaddings - leftRightBorders;
+    const calculateMaxLineWidth = () => {
+        const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+        const leftRightPaddings = 2 * 3 * rootFontSize;
+        const leftRightBorders = 2 * 1.5;
+        const maxPossibleLineWidth = window.innerWidth * 0.6 - leftRightPaddings - leftRightBorders;
 
-            const words = textToType.split(' ');
-            let currentLine = '';
-            let maxLineWidth = 0;
+        const words = textToType.split(' ');
+        let currentLine = '';
+        let maxLineWidth = 0;
 
-            const tempElement = document.createElement('div');
-            tempElement.style.font = '1.3em Courier';
-            tempElement.style.width = 'fit-content';
+        const tempElement = document.createElement('div');
+        tempElement.style.font = '1.3em Courier';
+        tempElement.style.width = 'fit-content';
 
-            words.forEach((word) => {
-                currentLine = currentLine ? `${currentLine} ${word}` : word;
-                tempElement.innerText = currentLine;
-                document.body.appendChild(tempElement);
+        words.forEach((word) => {
+            currentLine = currentLine ? `${currentLine} ${word}` : word;
+            tempElement.innerText = currentLine;
+            document.body.appendChild(tempElement);
 
-                const currentLineWidth = tempElement.getBoundingClientRect().width;
-                if (currentLineWidth > maxPossibleLineWidth) {
-                    currentLine = word;
-                } else {
-                    maxLineWidth = Math.max(currentLineWidth, maxLineWidth);
-                }
-                document.body.removeChild(tempElement);
-            });
-            setMaxWidth(maxLineWidth + leftRightBorders + leftRightPaddings);
-        };
-
-        calculateMaxLineWidth();
-    }, [textToType]);
-
-    const resetState = () => {
-        setCurrentIndex(0);
-        setLastCorrectIndex(-1);
-        setStartTime(null);
-        setTypingSpeed(null);
-        setAccuracy(null);
-        setIncorrectEntries(0);
+            const currentLineWidth = tempElement.getBoundingClientRect().width;
+            if (currentLineWidth > maxPossibleLineWidth) {
+                currentLine = word;
+            } else {
+                maxLineWidth = Math.max(currentLineWidth, maxLineWidth);
+            }
+            document.body.removeChild(tempElement);
+        });
+        setMaxWidth(maxLineWidth + leftRightBorders + leftRightPaddings);
     };
 
-    useEffect(() => {
-        resetRef.current = resetState;
-    }, []);
-
-    useEffect(() => {
-        const handleKeyPress = (event: KeyboardEvent) => {
-            if (startTime === null) {
-                setStartTime(Date.now());
-            }
-            const typedChar = event.key;
-            const isValidInput = validChars.test(typedChar);
-            if (isValidInput) {
-                handleValidInput(typedChar);
-            } else if (typedChar === 'Backspace' && currentIndex > 0) {
-                handleBackspace();
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyPress);
-        return () => {
-            window.removeEventListener('keydown', handleKeyPress);
-        };
-    }, [textToType, currentIndex, lastCorrectIndex, startTime]);
+    const handleKeyPress = (event: KeyboardEvent) => {
+        if (startTime === null) {
+            setStartTime(Date.now());
+        }
+        const typedChar = event.key;
+        const isValidInput = validChars.test(typedChar);
+        if (isValidInput) {
+            handleValidInput(typedChar);
+        } else if (typedChar === 'Backspace' && currentIndex > 0) {
+            handleBackspace();
+        }
+    };
 
     const handleValidInput = (typedChar: string) => {
         if (currentIndex === textToType.length) {
@@ -126,6 +102,30 @@ const TypingArea: React.FC<TypingAreaProps> = ({
         setTypingSpeed(speed);
         setAccuracy(accuracyValue);
     };
+
+    const resetState = () => {
+        setCurrentIndex(0);
+        setLastCorrectIndex(-1);
+        setStartTime(null);
+        setTypingSpeed(null);
+        setAccuracy(null);
+        setIncorrectEntries(0);
+    };
+
+    useEffect(() => {
+        resetRef.current = resetState;
+    }, []);
+
+    useEffect(() => {
+        calculateMaxLineWidth();
+    }, [textToType]);
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyPress);
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [textToType, currentIndex, lastCorrectIndex, startTime]);
 
     const renderText = () => {
         return (
