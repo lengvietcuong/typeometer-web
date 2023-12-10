@@ -2,15 +2,14 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import TypingArea from '../components/TypingArea';
-import { darkGray, green, translucentWhite } from '../styles/colors';
-import "./globals.css"
+import { darkGray, green } from '../styles/colors';
+import './globals.css';
 
 const TypingTest: React.FC = () => {
     const typingAreaRef = useRef<any>();
     const [textToType, setTextToType] = useState('');
     const [sourceOfText, setSourceOfText] = useState('');
     const [showNextButton, setShowNextButton] = useState(false);
-    const [textBoxWidth, setTextBoxWidth] = useState<number | null>(null);
 
     const fetchRandomText = async () => {
         try {
@@ -18,11 +17,10 @@ const TypingTest: React.FC = () => {
             const texts = await response.json();
 
             const randomIndex = Math.floor(Math.random() * texts.length);
-            const randomText = texts[randomIndex].text;
-            const sourceOfText = texts[randomIndex].source;
+            const { text: randomText, source } = texts[randomIndex];
 
             setTextToType(randomText);
-            setSourceOfText(sourceOfText);
+            setSourceOfText(source);
             setShowNextButton(false);
         } catch (error) {
             console.error('Error fetching or parsing texts.json:', error);
@@ -33,17 +31,8 @@ const TypingTest: React.FC = () => {
         fetchRandomText();
     }, []);
 
-    useEffect(() => {
-        // Calculate the width of the text box and set it to state
-        const textBoxElement = document.getElementById('typing-area');
-        if (textBoxElement) {
-            const width = textBoxElement.offsetWidth;
-            setTextBoxWidth(width);
-        }
-    }, [textToType]);
-
     const handleNextButtonClick = () => {
-        typingAreaRef.current(); // Call resetState using the ref
+        typingAreaRef.current?.(); // Call resetState using the ref
         fetchRandomText();
         setShowNextButton(false);
     };
@@ -63,20 +52,9 @@ const TypingTest: React.FC = () => {
                 justifyContent: 'center',
             }}
         >
-            <div
-                style={{
-                    backgroundColor: translucentWhite,
-                    padding: '0.7rem',
-                    borderRadius: '8px 8px 0 0',
-                    width: textBoxWidth ? textBoxWidth : 'fit-content',
-                }}
-            >
-                <h1 style={{ textAlign: 'center', color: green, fontSize: '1.3em' }}>
-                    {sourceOfText}
-                </h1>
-            </div>
             <TypingArea
                 textToType={textToType}
+                sourceOfText={sourceOfText}
                 onTypingComplete={handleTypingComplete}
                 resetRef={typingAreaRef}
             />

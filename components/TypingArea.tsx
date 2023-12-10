@@ -3,19 +3,60 @@ import { green, red, translucentWhite } from '../styles/colors';
 
 interface TypingAreaProps {
     textToType: string;
+    sourceOfText: string;
     onTypingComplete: () => void;
     resetRef: React.MutableRefObject<() => void>;
 }
 
-const TypingArea: React.FC<TypingAreaProps> = ({ textToType, onTypingComplete = () => { }, resetRef }) => {
+const TypingArea: React.FC<TypingAreaProps> = ({
+    textToType,
+    sourceOfText,
+    onTypingComplete = () => { },
+    resetRef,
+}) => {
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [lastCorrectIndex, setLastCorrectIndex] = useState<number>(-1);
     const [startTime, setStartTime] = useState<number | null>(null);
     const [typingSpeed, setTypingSpeed] = useState<number | null>(null);
     const [accuracy, setAccuracy] = useState<number | null>(null);
     const [incorrectEntries, setIncorrectEntries] = useState<number>(0);
+    const [maxWidth, setMaxWidth] = useState<number>(0);
 
-    const validChars = /^[a-zA-Z0-9\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]$/
+    const validChars = /^[a-zA-Z0-9\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]$/;
+
+    useEffect(() => {
+        const calculateMaxLineWidth = () => {
+            const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+            const leftRightPaddings = 2 * 3 * rootFontSize;
+            const leftRightBorders = 2 * 1.5;
+            const maxPossibleLineWidth = window.innerWidth * 0.6 - leftRightPaddings - leftRightBorders;
+
+            const words = textToType.split(' ');
+            let currentLine = '';
+            let maxLineWidth = 0;
+
+            const tempElement = document.createElement('div');
+            tempElement.style.font = '1.3em Courier';
+            tempElement.style.width = 'fit-content';
+
+            words.forEach((word) => {
+                currentLine = currentLine ? `${currentLine} ${word}` : word;
+                tempElement.innerText = currentLine;
+                document.body.appendChild(tempElement);
+
+                const currentLineWidth = tempElement.getBoundingClientRect().width;
+                if (currentLineWidth > maxPossibleLineWidth) {
+                    currentLine = word;
+                } else {
+                    maxLineWidth = Math.max(currentLineWidth, maxLineWidth);
+                }
+                document.body.removeChild(tempElement);
+            });
+            setMaxWidth(maxLineWidth + leftRightBorders + leftRightPaddings);
+        };
+
+        calculateMaxLineWidth();
+    }, [textToType]);
 
     const resetState = () => {
         setCurrentIndex(0);
@@ -48,7 +89,7 @@ const TypingArea: React.FC<TypingAreaProps> = ({ textToType, onTypingComplete = 
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, [textToType, currentIndex, lastCorrectIndex, startTime, resetRef]);
+    }, [textToType, currentIndex, lastCorrectIndex, startTime]);
 
     const handleValidInput = (typedChar: string) => {
         if (currentIndex === textToType.length) {
@@ -86,18 +127,30 @@ const TypingArea: React.FC<TypingAreaProps> = ({ textToType, onTypingComplete = 
         setAccuracy(accuracyValue);
     };
 
-    const renderTextColor = () => {
+    const renderText = () => {
         return (
             <div id="typing-area" style={{ textAlign: 'center' }}>
-                <div style={{
-                    maxWidth: '60vw',
-                    border: `1.5px solid ${translucentWhite}`,
-                    borderRadius: '0 0 8px 8px',
-                    padding: '2rem 3rem',
-                    overflowWrap: 'break-word',
-                    textAlign: 'left',
-                    fontSize: '1.3em',
-                }}>
+                <div
+                    style={{
+                        width: maxWidth,
+                        backgroundColor: translucentWhite,
+                        padding: '0.7rem 1.4rem',
+                        borderRadius: '8px 8px 0 0',
+                    }}
+                >
+                    <h1 style={{ color: green, fontSize: '1.3em' }}>{sourceOfText}</h1>
+                </div>
+                <div
+                    style={{
+                        maxWidth: maxWidth,
+                        border: `1.5px solid ${translucentWhite}`,
+                        borderRadius: '0 0 8px 8px',
+                        padding: '2rem 3rem',
+                        overflowWrap: 'break-word',
+                        textAlign: 'left',
+                        fontSize: '1.3em',
+                    }}
+                >
                     {textToType.split('').map((char, index) => {
                         const isHighlighted = index < currentIndex;
                         const isCorrect = index <= lastCorrectIndex;
@@ -124,7 +177,7 @@ const TypingArea: React.FC<TypingAreaProps> = ({ textToType, onTypingComplete = 
         );
     };
 
-    return renderTextColor();
+    return renderText();
 };
 
 export default TypingArea;
