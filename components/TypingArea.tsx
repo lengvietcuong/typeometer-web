@@ -34,24 +34,17 @@ const TypingArea: React.FC<TypingAreaProps> = ({
         let currentLine = '';
         let maxLineWidth = 0;
 
-        const tempElement = document.createElement('div');
-        tempElement.style.font = '1.3em Courier';
-        tempElement.style.width = 'fit-content';
-
         words.forEach((word) => {
             currentLine = currentLine ? `${currentLine} ${word}` : word;
-            tempElement.innerText = currentLine;
-            document.body.appendChild(tempElement);
 
-            const currentLineWidth = tempElement.getBoundingClientRect().width;
+            const currentLineWidth = currentLine.length * rootFontSize * 0.781;
             if (currentLineWidth > maxPossibleLineWidth) {
                 currentLine = word;
             } else {
                 maxLineWidth = Math.max(currentLineWidth, maxLineWidth);
             }
-            document.body.removeChild(tempElement);
         });
-        setMaxWidth(maxLineWidth + leftRightBorders + leftRightPaddings);
+        maxLineWidth && setMaxWidth(maxLineWidth + leftRightBorders + leftRightPaddings);
     };
 
     const handleKeyPress = (event: KeyboardEvent) => {
@@ -177,7 +170,7 @@ const TypingArea: React.FC<TypingAreaProps> = ({
         );
     };
 
-    return renderText();
+    return maxWidth ? renderText() : null;
 };
 
 export default TypingArea;
