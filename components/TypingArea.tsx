@@ -111,7 +111,9 @@ const TypingArea: React.FC<TypingAreaProps> = ({
     }, []);
 
     useEffect(() => {
-        calculateMaxLineWidth();
+        if (textToType) {
+            calculateMaxLineWidth();
+        }
     }, [textToType]);
 
     useEffect(() => {
@@ -119,7 +121,7 @@ const TypingArea: React.FC<TypingAreaProps> = ({
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, [textToType, currentIndex, lastCorrectIndex, startTime]);
+    }, [textToType, currentIndex]);
 
     const renderText = () => {
         return (
@@ -171,7 +173,7 @@ const TypingArea: React.FC<TypingAreaProps> = ({
         );
     };
 
-    return maxWidth ? renderText() : null;
+    return maxWidth && textToType ? renderText() : null;
 };
 
 export default TypingArea;
