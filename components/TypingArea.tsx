@@ -26,6 +26,7 @@ const TypingArea: React.FC<TypingAreaProps> = ({
 
     const calculateMaxLineWidth = () => {
         const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+        const charWidth = rootFontSize * 0.781;
         const leftRightPaddings = 2 * 3 * rootFontSize;
         const leftRightBorders = 2 * 1.5;
         const maxPossibleLineWidth = window.innerWidth * 0.6 - leftRightPaddings - leftRightBorders;
@@ -37,7 +38,7 @@ const TypingArea: React.FC<TypingAreaProps> = ({
         words.forEach((word) => {
             currentLine = currentLine ? `${currentLine} ${word}` : word;
 
-            const currentLineWidth = currentLine.length * rootFontSize * 0.781;
+            const currentLineWidth = currentLine.length * charWidth;
             if (currentLineWidth > maxPossibleLineWidth) {
                 currentLine = word;
             } else {

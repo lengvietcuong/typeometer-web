@@ -32,8 +32,8 @@ const TypingTest: React.FC = () => {
     }, []);
 
     const handleNextButtonClick = () => {
-        typingAreaRef.current?.(); // Call resetState using the ref
         fetchRandomText();
+        typingAreaRef.current?.(); // Call resetState using the ref
         setShowNextButton(false);
     };
 
