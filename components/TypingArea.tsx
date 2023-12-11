@@ -98,6 +98,7 @@ const TypingArea: React.FC<TypingAreaProps> = ({
     };
 
     const resetState = () => {
+        setMaxWidth(0);
         setCurrentIndex(0);
         setLastCorrectIndex(-1);
         setStartTime(null);
