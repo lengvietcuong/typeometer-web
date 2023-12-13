@@ -1,81 +1,50 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react';
-import TypingArea from '../components/TypingArea';
-import { darkGray, green } from '../styles/colors';
 import './globals.css';
+import TextBox from '../components/Typing/TextBox';
+import TypingLogic from '../components/Typing/TypingLogic';
+import StatisticsDisplay from '../components/StatisticsDisplay';
+import NextButton from '../components/NextButton';
 
-const TypingTest: React.FC = () => {
-    const typingAreaRef = useRef<any>();
-    const [textToType, setTextToType] = useState('');
-    const [sourceOfText, setSourceOfText] = useState('');
-    const [showNextButton, setShowNextButton] = useState(false);
 
-    const fetchRandomText = async () => {
-        try {
-            const response = await fetch('/texts.json');
-            const texts = await response.json();
+const TypingArea = () => {
+    const {
+        textToType,
+        sourceOfText,
+        textBoxWidth,
+        currentIndex,
+        lastCorrectIndex,
+        speed,
+        accuracy,
+        showNextButton,
+        handleNextButtonClick,
+    } = TypingLogic();
 
-            const randomIndex = Math.floor(Math.random() * texts.length);
-            const { text: randomText, source } = texts[randomIndex];
-
-            setTextToType(randomText);
-            setSourceOfText(source);
-            setShowNextButton(false);
-        } catch (error) {
-            console.error('Error fetching or parsing texts.json:', error);
-        }
-    };
-
-    useEffect(() => {
-        fetchRandomText();
-    }, []);
-
-    const handleNextButtonClick = () => {
-        setTextToType('');
-        typingAreaRef.current?.(); // Call resetState using the ref
-        fetchRandomText();
-        setShowNextButton(false);
-    };
-
-    const handleTypingComplete = () => {
-        setShowNextButton(true);
-    };
-
+    if (!textToType || !textBoxWidth) {
+        return;
+    }
+    console.log('render')
     return (
-        <div
-            style={{
-                backgroundColor: darkGray,
-                minHeight: '100vh',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}
-        >
-            <TypingArea
+        <div id="typing-area" style={{
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            fontSize: '1.3rem'
+        }}>
+            <TextBox
                 textToType={textToType}
                 sourceOfText={sourceOfText}
-                onTypingComplete={handleTypingComplete}
-                resetRef={typingAreaRef}
+                textBoxWidth={textBoxWidth}
+                currentIndex={currentIndex}
+                lastCorrectIndex={lastCorrectIndex}
             />
-            {showNextButton && (
-                <button
-                    style={{
-                        marginTop: '1.3rem',
-                        backgroundColor: green,
-                        color: 'black',
-                        padding: '0.5rem 1rem',
-                        borderRadius: '4px',
-                        border: 'none',
-                    }}
-                    onClick={handleNextButtonClick}
-                >
-                    Next
-                </button>
-            )}
+            {speed && accuracy && <StatisticsDisplay speed={speed} accuracy={accuracy} />}
+            {showNextButton && <NextButton onClick={handleNextButtonClick} />}
         </div>
     );
 };
 
-export default TypingTest;
+export default TypingArea;
