@@ -78,6 +78,7 @@ const TypingLogic = () => {
     };
 
     const resetState = () => {
+        setTextToType('');
         setTextBoxWidth(0);
         setCurrentIndex(0);
         setLastCorrectIndex(-1);
