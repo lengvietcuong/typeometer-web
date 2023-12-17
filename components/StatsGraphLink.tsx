@@ -9,7 +9,8 @@ const StatsGraphLink = () => {
             style={{
                 marginTop: '0.2em',
                 color: 'gray',
-                fontSize: '1rem'
+                fontSize: '1rem',
+                textDecoration: 'underline'
             }}
         >
             View Graph
