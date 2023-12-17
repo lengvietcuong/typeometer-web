@@ -9,7 +9,7 @@ const NextButton: React.FC<NextButtonProps> = ({ onClick }) => {
     return (
         <button
             style={{
-                marginTop: '1.3rem',
+                marginTop: '2rem',
                 backgroundColor: green,
                 color: 'black',
                 padding: '0.5rem 1rem',

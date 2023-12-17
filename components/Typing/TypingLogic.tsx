@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { fetchRandomText } from '../../utils/fetchRandomText';
 import { calculateTextBoxWidth } from '../../utils/calculateTextBoxWidth';
+import useStatsStore from './StatsStore';
 
 const TypingLogic = () => {
     const [textToType, setTextToType] = useState('');
@@ -11,7 +12,9 @@ const TypingLogic = () => {
     const [incorrectEntries, setIncorrectEntries] = useState<number>(0);
     const [speed, setSpeed] = useState<number | null>(null);
     const [accuracy, setAccuracy] = useState<number | null>(null);
+    const { addSpeed, addAccuracy } = useStatsStore();
     const [showNextButton, setShowNextButton] = useState(false);
+    const [showStatsGraphLink, setShowStatsGraphLink] = useState(false);
     const startTime = useRef<number | null>(null);
 
     const validChars = /^[a-zA-Z0-9\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]$/;
@@ -46,6 +49,7 @@ const TypingLogic = () => {
             setLastCorrectIndex((prevIndex) => prevIndex + 1);
             if (currentIndex === textToType.length - 1) {
                 calculateStats();
+                setShowStatsGraphLink(true);
                 setShowNextButton(true);
             }
         } else {
@@ -65,16 +69,19 @@ const TypingLogic = () => {
         const totalChars = textToType.length;
 
         const speed = parseFloat(((totalChars / 5) / (secondsElapsed / 60)).toFixed(2));
-        const accuracyValue = parseFloat(((totalChars / (totalChars + incorrectEntries)) * 100).toFixed(2));
+        const accuracy = parseFloat(((totalChars / (totalChars + incorrectEntries)) * 100).toFixed(2));
 
         setSpeed(speed);
-        setAccuracy(accuracyValue);
+        addSpeed(speed);
+        setAccuracy(accuracy);
+        addAccuracy(accuracy);
     };
 
     const handleNextButtonClick = () => {
         resetState();
         setTextData();
         setShowNextButton(false);
+        setShowStatsGraphLink(false);
     };
 
     const resetState = () => {
@@ -115,9 +122,8 @@ const TypingLogic = () => {
         speed,
         accuracy,
         showNextButton,
-        handleKeyPress,
         handleNextButtonClick,
-        setTextBoxWidth
+        showStatsGraphLink
     };
 };
 

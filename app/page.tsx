@@ -1,15 +1,15 @@
 'use client'
 
+import React from 'react';
 import './globals.css';
-import { Courier_Prime } from "next/font/google"
+import { courier } from '../styles/courier';
 import TextBox from '../components/Typing/TextBox';
 import TypingLogic from '../components/Typing/TypingLogic';
-import StatisticsDisplay from '../components/StatisticsDisplay';
+import StatsDisplay from '../components/StatsDisplay';
+import StatsGraphLink from '../components/StatsGraphLink';
 import NextButton from '../components/NextButton';
 
-const courier = Courier_Prime({ weight: '400', subsets: ['latin'] })
-
-const TypingArea = () => {
+const TypingArea: React.FC = () => {
     const {
         textToType,
         sourceOfText,
@@ -20,6 +20,7 @@ const TypingArea = () => {
         accuracy,
         showNextButton,
         handleNextButtonClick,
+        showStatsGraphLink,
     } = TypingLogic();
 
     if (!textToType || !textBoxWidth) {
@@ -42,7 +43,8 @@ const TypingArea = () => {
                 currentIndex={currentIndex}
                 lastCorrectIndex={lastCorrectIndex}
             />
-            {speed && accuracy && <StatisticsDisplay speed={speed} accuracy={accuracy} />}
+            {speed && accuracy && <StatsDisplay speed={speed} accuracy={accuracy} />}
+            {showStatsGraphLink && <StatsGraphLink />}
             {showNextButton && <NextButton onClick={handleNextButtonClick} />}
         </main>
     );
