@@ -4,8 +4,8 @@ import { calculateTextBoxWidth } from '../../utils/calculateTextBoxWidth';
 import useStatsStore from './StatsStore';
 
 const TypingLogic = () => {
-    const [textToType, setTextToType] = useState('');
-    const [sourceOfText, setSourceOfText] = useState('');
+    const [textToType, setTextToType] = useState<string>('');
+    const [sourceOfText, setSourceOfText] = useState<string>('');
     const [textBoxWidth, setTextBoxWidth] = useState<number>(0);
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [lastCorrectIndex, setLastCorrectIndex] = useState<number>(-1);
@@ -13,8 +13,8 @@ const TypingLogic = () => {
     const [speed, setSpeed] = useState<number | null>(null);
     const [accuracy, setAccuracy] = useState<number | null>(null);
     const { addSpeed, addAccuracy } = useStatsStore();
-    const [showNextButton, setShowNextButton] = useState(false);
-    const [showStatsGraphLink, setShowStatsGraphLink] = useState(false);
+    const [showNextButton, setShowNextButton] = useState<boolean>(false);
+    const [showStatsGraphLink, setShowStatsGraphLink] = useState<boolean>(false);
     const startTime = useRef<number | null>(null);
 
     const validChars = /^[a-zA-Z0-9\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]$/;
